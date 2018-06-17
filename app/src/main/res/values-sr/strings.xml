@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Флим</string>
+    <string name="about_flym">О Флиму</string>
+    <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="menu_settings">Поставке</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_all_read">Означи све прочитаним</string>
+    <string name="flym_feeds">Флимови доводи</string>
+    <string name="error">Грешка</string>
+    <string name="network_error">Мрежа није постављена</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Доводи</string>
+    <string name="menu_add_group">Додај групу</string>
+    <string name="menu_import">Увези ОПМЛ фајл</string>
+    <string name="menu_export">Извези у ОПМЛ фајл</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_export">Извоз није успео. Проверите да ли имате монтирану уписиву СД картицу.</string>
+    <string name="error_external_storage_not_available">Спољашње складиште (нпр. СД картица) није доступно.</string>
+    <string name="feed_search">Претрага довода</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
+    <string name="question_delete_feed">Желите ли заиста да обришете овај довод?</string>
+    <string name="question_delete_group">Желите ли заиста да обришете ову групу и све њене доводе?</string>
+    <string name="add_group_title">Одредите име групе</string>
+    <string name="message_exported_to">Извезено у %s.</string>
+    <string name="to_group_title">Померање довода</string>
+    <string name="to_group_message">Можете да померите овај довод у или изнад групе. Где желите да га померите?</string>
+    <string name="to_group_above">Изнад групе</string>
+    <string name="to_group_into">У групу</string>
+    <string name="google_news_top_stories">Најбоље приче</string>
+    <string name="google_news_world">Свет</string>
+    <string name="google_news_business">Посао</string>
+    <string name="google_news_science_technology">Наука &amp; Технологија</string>
+    <string name="google_news_entertainment">Забава</string>
+    <string name="google_news_sports">Спорт</string>
+    <string name="google_news_health">Здравље</string>
+
+    <!-- ENTRIES -->
+    <string name="all_entries">All entries</string>
+    <string name="menu_star">Омиљено</string>
+    <string name="menu_unstar">Није омиљено</string>
+    <string name="menu_share">Подели</string>
+    <string name="menu_mark_as_unread">Означи као ново</string>
+    <string name="get_full_text">Добави цео текст</string>
+    <string name="original_text">Прикажи оригиналан текст</string>
+    <string name="open_in_browser">Погледај у прегледачу</string>
+    <string name="cant_open_link">Ниједна апликација није додељена овој вези</string>
+
+    <!-- WIDGET -->
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Аутоматско освежавање</string>
+    <string name="settings_refresh_enabled">Омогући</string>
+    <string name="settings_refresh_enabled_description">Омогући аутоматско освежавање довода</string>
+    <string name="settings_refresh_interval">Интервал освежавања</string>
+    <string name="settings_category_content_presentation">Приказ садржаја</string>
+    <string name="settings_keep_time">Време чувања уноса</string>
+    <string name="settings_display_images">Прикажи слике</string>
+    <string name="settings_display_images_description">Прикажи слике у уносима</string>
+    <string name="settings_preload_image_mode">Предучитавање слика</string>
+    <string name="settings_font_size">Величина текста</string>
+    <string name="settings_refresh_wifi_only">Само преко бежичне везе</string>
+    <string name="settings_refresh_wifi_only_description">Аутоматско освежавање само ако је доступна бежична веза</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d нови унос</item>
+        <item quantity="few">%d нових уноса</item>
+        <item quantity="other">%d нових уноса</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>5 минута</item>
+        <item>15 минута</item>
+        <item>30 минута</item>
+        <item>1 сат</item>
+        <item>2 сата</item>
+        <item>6 сати</item>
+        <item>12 сати</item>
+        <item>1 дан</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 дан</item>
+        <item>2 дана</item>
+        <item>4 дана</item>
+        <item>1 седмица</item>
+        <item>2 седмице</item>
+        <item>1 месец</item>
+        <item>2 месеца</item>
+        <item>3 месеца</item>
+        <item>Заувек</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Стандардна</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Никад</item>
+        <item>Само преко бежичног</item>
+        <item>Увек</item>
+    </string-array>
+
+</resources>

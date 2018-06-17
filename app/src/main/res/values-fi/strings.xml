@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Tietoja Flymista</string>
+    <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="menu_settings">Asetukset</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
+    <string name="flym_feeds">Flym-syötteet</string>
+    <string name="error">Virhe</string>
+    <string name="network_error">Ei verkkoyhteyttä</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Syötteet</string>
+    <string name="menu_add_group">Lisää ryhmä</string>
+    <string name="menu_import">Tuo OPML-tiedosto</string>
+    <string name="menu_export">Vie OPML-tiedosto</string>
+    <string name="error_feed_export">Vienti epäonnistui. Varmista, että SD-kortille voidaan kirjoittaa.
+    </string>
+    <string name="error_external_storage_not_available">Ulkoinen tallenusväline (esim. SD-kortti) ei ole saatavilla.
+    </string>
+    <string name="feed_search">Hae syötteitä</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
+    <string name="question_delete_feed">Haluatko poistaa tämän syötteen?</string>
+    <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?
+    </string>
+    <string name="add_group_title">Uusi ryhmä</string>
+    <string name="message_exported_to">Viety tiedostoon %s</string>
+    <string name="to_group_title">Syötteen siirtäminen</string>
+    <string name="to_group_message">Voit asettaa tämän syötteen ryhmän sisään tai tasoa ylemmäs. Mitä haluat tehdä?
+    </string>
+    <string name="to_group_above">Ylemmälle tasolle</string>
+    <string name="to_group_into">Ryhmään</string>
+    <string name="google_news_top_stories">Etusivun uutiset</string>
+    <string name="google_news_world">Ulkomaat</string>
+    <string name="google_news_business">Talous</string>
+    <string name="google_news_science_technology">Tiede &amp; Tekniikka</string>
+    <string name="google_news_entertainment">Viihde</string>
+    <string name="google_news_sports">Urheilu</string>
+    <string name="google_news_health">Terveys</string>
+
+    <!-- ENTRIES -->
+    <string name="menu_star">Merkitse tähdellä</string>
+    <string name="menu_unstar">Poista tähti</string>
+    <string name="menu_share">Jaa</string>
+    <string name="menu_mark_as_unread">Merkitse lukemattomaksi</string>
+    <string name="get_full_text">Hae koko teksti</string>
+    <string name="original_text">Näytä alkuperäinen teksti</string>
+	<string name="open_in_browser">Avaa selaimessa</string>
+    <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
+
+    <!-- WIDGET -->
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Automaattinen päivitys</string>
+    <string name="settings_refresh_enabled">Päivitä automaattisesti</string>
+    <string name="settings_refresh_enabled_description">Päivitä kaikki syötteet automaattisesti
+    </string>
+    <string name="settings_refresh_interval">Päivitysväli</string>
+    <string name="settings_category_content_presentation">Sisällön esittäminen</string>
+    <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
+    <string name="settings_display_images">Näytä kuvat</string>
+    <string name="settings_display_images_description">Näytä kuvat artikkeleissa</string>
+    <string name="settings_preload_image_mode">Esilataa kuvat</string>
+    <string name="settings_font_size">Kirjasintyypin koko</string>
+    <string name="settings_refresh_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
+    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
+    </string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Yksi uusi artikkeli</item>
+        <item quantity="other">%d uutta artikkelia</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>5 minuuttia</item>
+        <item>15 minuuttia</item>
+        <item>30 minuuuttia</item>
+        <item>1 tunti</item>
+        <item>2 tuntia</item>
+        <item>6 tuntia</item>
+        <item>12 tuntia</item>
+        <item>1 päivä</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 päivä</item>
+        <item>2 päivää</item>
+        <item>4 päivää</item>
+        <item>1 viikko</item>
+        <item>2 viikkoa</item>
+        <item>1 kuukausi</item>
+        <item>2 kuukautta</item>
+        <item>3 kuukautta</item>
+        <item>Ikuisesti</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Normaali</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Ei koskaan</item>
+        <item>Vain Wi-Fi -yhteyden kautta</item>
+        <item>Aina</item>
+    </string-array>
+    <string name="storage_request_explanation">Voidaksesi tuoda tai viedä tiedoston, sinun täytyy antaa sovellukselle käyttölupa tallennusmuistin sisältöön.</string>
+    <string name="all_entries">Kaikki </string>
+
+</resources>

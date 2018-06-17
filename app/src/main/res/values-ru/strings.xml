@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Про Flym</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_all_read">Пометить все как прочитанное</string>
+    <string name="flym_feeds">Flym ленты</string>
+    <string name="error">Ошибка</string>
+    <string name="network_error">Нет подключения к сети</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Ленты</string>
+    <string name="menu_add_group">Добавить группу</string>
+    <string name="menu_import">Импорт из OPML-файла</string>
+    <string name="menu_export">Экспорт в OPML-файл</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_export">Экспорт не удался. Удостоверьтесь, что карта памяти имеет
+        возможность записи.
+    </string>
+    <string name="error_external_storage_not_available">Внешнее хранилище (например, карта памяти)
+        недоступно.
+    </string>
+    <string name="feed_search">Поиск лент</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
+    <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
+    <string name="question_delete_group">Вы действительно хотите удалить эту группу и все ее
+        ленты??
+    </string>
+    <string name="add_group_title">Выберите название группы</string>
+    <string name="message_exported_to">Экспортировано в %s.</string>
+    <string name="to_group_title">Перенос ленты</string>
+    <string name="to_group_message">Вы можете поместить ленту внутрь этой группы, либо сверху от
+        нее. Что вы хотите сделать?
+    </string>
+    <string name="to_group_above">Над группой</string>
+    <string name="to_group_into">Внутрь группы</string>
+    <string name="google_news_top_stories">Top Stories</string>
+    <string name="google_news_world">World</string>
+    <string name="google_news_business">Business</string>
+    <string name="google_news_science_technology">Science &amp; Technology</string>
+    <string name="google_news_entertainment">Entertainment</string>
+    <string name="google_news_sports">Sports</string>
+    <string name="google_news_health">Health</string>
+
+    <!-- ENTRIES -->
+    <string name="all_entries">All entries</string>
+    <string name="menu_star">Поместить в избранное</string>
+    <string name="menu_unstar">Убрать из избранного</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
+    <string name="get_full_text">Загрузить весь текст</string>
+    <string name="original_text">Показать оригинальный текст</string>
+    <string name="open_in_browser">Открыть в браузере</string>
+    <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
+
+    <!-- WIDGET -->
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Автоматическое обновление</string>
+    <string name="settings_refresh_enabled">Включить автоматическое обновление</string>
+    <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент
+    </string>
+    <string name="settings_refresh_interval">Интервал обновления</string>
+    <string name="settings_category_content_presentation">Представление содержания</string>
+    <string name="settings_keep_time">Время хранения новостей</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_font_size">Размер текста</string>
+    <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
+    <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
+        выполняться только при включенном WiFi
+    </string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d new entry</item>
+        <item quantity="few">%d new entries</item>
+        <item quantity="many">%d new entries</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>5 минут</item>
+        <item>15 минут</item>
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>2 часа</item>
+        <item>6 часов</item>
+        <item>12 часов</item>
+        <item>1 день</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 день</item>
+        <item>2 дня</item>
+        <item>4 дня</item>
+        <item>1 неделя</item>
+        <item>2 недели</item>
+        <item>1 месяц</item>
+        <item>2 месяца</item>
+        <item>3 месяца</item>
+        <item>Не удалять</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Стандартно</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
+    </string-array>
+
+</resources>
