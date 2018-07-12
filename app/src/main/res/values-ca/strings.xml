@@ -1,24 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2010-2012 Stefan Handschuh
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- GENERAL -->
@@ -28,8 +8,8 @@
     <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Paràmetres</string>
-    <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder</string>
+    <string name="menu_edit_feed">Edita el canal</string>
+    <string name="menu_reorder">Reorder feeds</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
     <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
@@ -38,13 +18,14 @@
     <string name="error">Error</string>
     <string name="network_error">No hi ha connectivitat</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Canals</string>
     <string name="menu_add_group">Afegir un grup</string>
     <string name="menu_import">Importa des de OPML</string>
     <string name="menu_export">Exporta a OPML</string>
-    <string name="storage_request_explanation">Per poder importar o exportar els feeds des d'un arxiu haureu de permetre que l'aplicació accedeixi a la memòria d'emmagatzematge.</string>
+    <string name="storage_request_explanation">Per poder importar o exportar els feeds des d\'un arxiu haureu de permetre que l\'aplicació accedeixi a la memòria d\'emmagatzematge.</string>
     <string name="error_feed_export">No s\'ha pogut exportar el fitxer. Comproveu la memòria
         externa.
     </string>
@@ -52,7 +33,7 @@
         available.
     </string>
     <string name="feed_search">Cerca canals</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Voleu eliminar aquest canal?</string>
     <string name="question_delete_group">Voleu eliminar aquest grup i els seus canals?</string>
@@ -71,6 +52,8 @@
     <string name="google_news_entertainment">Entreteniment</string>
     <string name="google_news_sports">Esports</string>
     <string name="google_news_health">Salut</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Totes les entrades</string>
@@ -82,8 +65,12 @@
     <string name="original_text">Mostra el text original</string>
 	<string name="open_in_browser">Mostra al navegador</string>
     <string name="cant_open_link">No s\'ha trobat una aplicació\'per aquest enllaç.</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Actualització automàtica</string>

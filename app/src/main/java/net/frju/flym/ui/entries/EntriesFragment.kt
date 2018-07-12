@@ -28,7 +28,9 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -45,11 +47,13 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
+import net.frju.flym.utils.closeKeyboard
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
@@ -67,10 +71,10 @@ class EntriesFragment : Fragment() {
 		private const val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
 		fun newInstance(feed: Feed?): EntriesFragment {
-            return EntriesFragment().apply {
-                feed?.let {
-                    arguments = bundleOf(ARG_FEED to feed)
-                }
+			return EntriesFragment().apply {
+				feed?.let {
+					arguments = bundleOf(ARG_FEED to feed)
+				}
 			}
 		}
 	}
@@ -85,13 +89,13 @@ class EntriesFragment : Fragment() {
 
 	private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-	private val adapter = EntryAdapter({ entry ->
-		navigator.goToEntryDetails(entry, entryIds!!)
-	}, { entry, view ->
-		entry.favorite = !entry.favorite
+	private val adapter = EntryAdapter({ entryWithFeed ->
+		navigator.goToEntryDetails(entryWithFeed.entry.id, entryIds!!)
+	}, { entryWithFeed, view ->
+		entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
 
 		view.favorite_icon?.let {
-			if (entry.favorite) {
+			if (entryWithFeed.entry.favorite) {
 				it.setImageResource(R.drawable.ic_star_white_24dp)
 			} else {
 				it.setImageResource(R.drawable.ic_star_border_white_24dp)
@@ -99,7 +103,11 @@ class EntriesFragment : Fragment() {
 		}
 
 		doAsync {
-			App.db.entryDao().insert(entry)
+			if (entryWithFeed.entry.favorite) {
+				App.db.entryDao().markAsFavorite(entryWithFeed.entry.id)
+			} else {
+				App.db.entryDao().markAsNotFavorite(entryWithFeed.entry.id)
+			}
 		}
 	})
 	private var listDisplayDate = Date().time
@@ -159,7 +167,7 @@ class EntriesFragment : Fragment() {
 						}
 					}
 
-					longSnackbar(coordinator, "Marked as read", "Undo") {
+					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) {
 						doAsync {
 							// TODO check if limit still needed
 							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
@@ -281,7 +289,52 @@ class EntriesFragment : Fragment() {
 			startRefresh()
 		}
 
+		val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+			private val VELOCITY = dip(800).toFloat()
+
+			override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+				return false
+			}
+
+			override fun getSwipeEscapeVelocity(defaultValue: Float): Float {
+				return VELOCITY
+			}
+
+			override fun getSwipeVelocityThreshold(defaultValue: Float): Float {
+				return VELOCITY
+			}
+
+			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+				adapter.currentList?.get(viewHolder.adapterPosition)?.let { entryWithFeed ->
+					entryWithFeed.entry.read = !entryWithFeed.entry.read
+					doAsync {
+						if (entryWithFeed.entry.read) {
+							App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+						} else {
+							App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+						}
+
+						if (bottom_navigation.selectedItemId != R.id.unreads) {
+							uiThread {
+								adapter.notifyItemChanged(viewHolder.adapterPosition)
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// attaching the touch helper to recycler view
+		ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recycler_view)
+
 		recycler_view.emptyView = empty_view
+
+		recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+			override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+				super.onScrollStateChanged(recyclerView, newState)
+				activity?.closeKeyboard()
+			}
+		})
 	}
 
 	private fun startRefresh() {
@@ -313,11 +366,10 @@ class EntriesFragment : Fragment() {
 			val searchView = searchItem.actionView as SearchView
 			if (searchText != null) {
 				searchItem.expandActionView()
-				searchView.post( // Without that, it just does not work
-						{
-							searchView.setQuery(searchText, false)
-							searchView.clearFocus()
-						})
+				searchView.post {
+					searchView.setQuery(searchText, false)
+					searchView.clearFocus()
+				}
 			}
 
 			searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

@@ -15,24 +15,19 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package net.frju.flym.ui.main
+package net.frju.flym.data.entities
 
-import net.frju.flym.data.entities.Feed
+import android.arch.persistence.room.Embedded
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-interface MainNavigator {
+@Parcelize
+data class FeedWithCount(
+        @Embedded
+        var feed: Feed,
+        var entryCount: Int = 0) : Parcelable {
 
-    enum class State {
-        SINGLE_COLUMN_MASTER, SINGLE_COLUMN_DETAILS, TWO_COLUMNS_EMPTY, TWO_COLUMNS_WITH_DETAILS
+    fun getEntryCountString(): String {
+        return if (entryCount > 0) entryCount.toString() else ""
     }
-
-    fun goToEntriesList(feed: Feed?)
-
-	fun goToEntryDetails(entryId: String, allEntryIds: List<String>)
-
-	fun goToAboutMe()
-
-	fun goToSettings()
-
-    fun setSelectedEntryId(selectedEntryId: String)
-
 }

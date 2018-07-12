@@ -28,8 +28,8 @@
     <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Asetukset</string>
-    <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder</string>
+    <string name="menu_edit_feed">Muokkaa syötettä</string>
+    <string name="menu_reorder">Reorder feeds</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
     <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
@@ -38,18 +38,20 @@
     <string name="error">Virhe</string>
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>
     <string name="menu_add_group">Lisää ryhmä</string>
     <string name="menu_import">Tuo OPML-tiedosto</string>
     <string name="menu_export">Vie OPML-tiedosto</string>
+    <string name="storage_request_explanation">Voidaksesi tuoda tai viedä tiedoston, sinun täytyy antaa sovellukselle käyttölupa tallennusmuistin sisältöön.</string>
     <string name="error_feed_export">Vienti epäonnistui. Varmista, että SD-kortille voidaan kirjoittaa.
     </string>
     <string name="error_external_storage_not_available">Ulkoinen tallenusväline (esim. SD-kortti) ei ole saatavilla.
     </string>
     <string name="feed_search">Hae syötteitä</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Haluatko poistaa tämän syötteen?</string>
     <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?
@@ -68,8 +70,11 @@
     <string name="google_news_entertainment">Viihde</string>
     <string name="google_news_sports">Urheilu</string>
     <string name="google_news_health">Terveys</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
+    <string name="all_entries">Kaikki </string>
     <string name="menu_star">Merkitse tähdellä</string>
     <string name="menu_unstar">Poista tähti</string>
     <string name="menu_share">Jaa</string>
@@ -78,8 +83,12 @@
     <string name="original_text">Näytä alkuperäinen teksti</string>
 	<string name="open_in_browser">Avaa selaimessa</string>
     <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">Peru</string>
+    <string name="marked_as_read">Merkitty luetuksi</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automaattinen päivitys</string>
@@ -136,7 +145,5 @@
         <item>Vain Wi-Fi -yhteyden kautta</item>
         <item>Aina</item>
     </string-array>
-    <string name="storage_request_explanation">Voidaksesi tuoda tai viedä tiedoston, sinun täytyy antaa sovellukselle käyttölupa tallennusmuistin sisältöön.</string>
-    <string name="all_entries">Kaikki </string>
 
 </resources>

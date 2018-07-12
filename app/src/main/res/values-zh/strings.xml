@@ -28,9 +28,9 @@
     <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">设置</string>
-    <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder</string>
-    <string name="menu_delete">Delete</string>
+    <string name="menu_edit_feed">编辑订阅</string>
+    <string name="menu_reorder">Reorder feeds</string>
+    <string name="menu_delete">删除</string>
     <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
     <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
     <string name="menu_all_read">标记全部为已读</string>
@@ -38,6 +38,7 @@
     <string name="error">错误</string>
     <string name="network_error">网络不可用</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">订阅</string>
@@ -48,7 +49,7 @@
     <string name="error_feed_export">导出失败，请确定你的SD卡可以读写。</string>
     <string name="error_external_storage_not_available">外置存储（如SD卡）不可用。</string>
     <string name="feed_search">搜索订阅</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">你确定要删除这个订阅</string>
     <string name="question_delete_group">你确定要删除这个分组和其中所有的订阅？</string>
@@ -65,6 +66,8 @@
     <string name="google_news_entertainment">娱乐</string>
     <string name="google_news_sports">体育</string>
     <string name="google_news_health">健康</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">所有条目</string>
@@ -76,8 +79,12 @@
     <string name="original_text">显示原始文本</string>
     <string name="open_in_browser">浏览器打开</string>
     <string name="cant_open_link">没有应用可以打开这个链接</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">撤销</string>
+    <string name="marked_as_read">标记已读</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">自动刷新</string>
@@ -94,7 +101,6 @@
     <string name="settings_refresh_wifi_only_description">自动刷新仅在Wi-Fi环境启用</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one"> 1 条新消息</item>
         <item quantity="other">%d 条新消息</item>
     </plurals>
 

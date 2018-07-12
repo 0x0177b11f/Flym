@@ -51,9 +51,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.connectivityManager
 import org.jetbrains.anko.error
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.toast
+import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -74,8 +76,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
-				.connectTimeout(10, TimeUnit.SECONDS)
-				.readTimeout(10, TimeUnit.SECONDS)
+				.connectTimeout(4, TimeUnit.SECONDS)
+				.readTimeout(4, TimeUnit.SECONDS)
 				.cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
 				.build()
 
@@ -104,8 +106,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				return
 			}
 
-			val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-			val networkInfo = connectivityManager.activeNetworkInfo
+			val networkInfo = context.connectivityManager.activeNetworkInfo
 			// Connectivity issue, we quit
 			if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {
 				return
@@ -127,7 +128,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				else -> { // == Constants.ACTION_REFRESH_FEEDS
 					PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true)
 
-					val keepTime = java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000L
+					val keepTime = PrefUtils.getString(PrefUtils.KEEP_TIME, "4").toLong() * 86400000L
 					val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
 					deleteOldEntries(keepDateBorderTime)
@@ -189,18 +190,18 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		fun shouldDownloadPictures(): Boolean {
 			val fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY)
 
-			var downloadPictures = false
 			if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
 				if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
-					downloadPictures = true
+					return true
 				} else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
-					val ni = (App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+					val ni = App.context.connectivityManager.activeNetworkInfo
 					if (ni != null && ni.type == ConnectivityManager.TYPE_WIFI) {
-						downloadPictures = true
+						return true
 					}
 				}
 			}
-			return downloadPictures
+
+			return false
 		}
 
 		fun getDownloadedImagePath(entryId: String, imgUrl: String): String =
@@ -260,8 +261,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					entry.link?.let { link ->
 						try {
 							createCall(link).execute().use {
-								it.body()?.string()?.let { body ->
-									Readability4JExtended(link, body).parse().articleContent?.html()?.let {
+								it.body()?.byteStream()?.let { input ->
+									Readability4JExtended(link, Jsoup.parse(input, null, link)).parse().articleContent?.html()?.let {
 										val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
 										if (downloadPictures) {
@@ -286,7 +287,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 								}
 							}
 						} catch (t: Throwable) {
-							error("Can't mobilize feed ${entry.link}", t)
+							error("Can't mobilize feedWithCount ${entry.link}", t)
 						}
 					}
 				}
@@ -305,19 +306,21 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private fun downloadAllImages() {
-			val tasks = App.db.taskDao().downloadTasks
-			for (task in tasks) {
-				try {
-					downloadImage(task.entryId, task.imageLinkToDl)
+			if (shouldDownloadPictures()) {
+				val tasks = App.db.taskDao().downloadTasks
+				for (task in tasks) {
+					try {
+						downloadImage(task.entryId, task.imageLinkToDl)
 
-					// If we are here, everything is OK
-					App.db.taskDao().delete(task)
-				} catch (ignored: Exception) {
-					if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
+						// If we are here, everything is OK
 						App.db.taskDao().delete(task)
-					} else {
-						task.numberAttempt += 1
-						App.db.taskDao().insert(task)
+					} catch (ignored: Exception) {
+						if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
+							App.db.taskDao().delete(task)
+						} else {
+							task.numberAttempt += 1
+							App.db.taskDao().insert(task)
+						}
 					}
 				}
 			}
@@ -341,7 +344,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					try {
 						result = refreshFeed(feed, keepDateBorderTime)
 					} catch (e: Exception) {
-						error("Can't fetch feed ${feed.link}", e)
+						error("Can't fetch feedWithCount ${feed.link}", e)
 					}
 
 					result
@@ -365,9 +368,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			val entries = mutableListOf<Entry>()
 			val entriesToInsert = mutableListOf<Entry>()
 			val imgUrlsToDownload = mutableMapOf<String, List<String>>()
-
 			val downloadPictures = shouldDownloadPictures()
 
+			val previousFeedState = feed.copy()
 			try {
 				createCall(feed.link).execute().use { response ->
 					val input = SyndFeedInput()
@@ -379,7 +382,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				feed.fetchError = true
 			}
 
-			App.db.feedDao().update(feed)
+			if (feed != previousFeedState) {
+				App.db.feedDao().update(feed)
+			}
 
 			// First we remove the entries that we already have in db (no update to save data)
 			val existingIds = App.db.entryDao().idsForFeed(feed.id)
@@ -398,6 +403,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					if (!existingIds.contains(entry.id)) {
 						entriesToInsert.add(entry)
 
+						entry.title = entry.title?.replace("\n", " ")?.trim()
 						entry.description?.let { desc ->
 							// Improve the description
 							val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
@@ -408,7 +414,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 									if (entry.imageLink == null) {
 										entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
 									}
-									imgUrlsToDownload.put(entry.id, imagesList)
+									imgUrlsToDownload[entry.id] = imagesList
 								}
 							} else if (entry.imageLink == null) {
 								entry.imageLink = HtmlUtils.getMainImageURL(improvedContent)
@@ -477,20 +483,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			if (IMAGE_FOLDER_FILE.exists()) {
 
 				// We need to exclude favorite entries images to this cleanup
-				val favorites = App.db.entryDao().favorites
+				val favoriteIds = App.db.entryDao().favoriteIds
 
 				IMAGE_FOLDER_FILE.listFiles().forEach { file ->
-					if (file.lastModified() < keepDateBorderTime) {
-						var isAFavoriteEntryImage = false
-						favorites.forEach loop@{
-							if (file.name.startsWith(it.id + ID_SEPARATOR)) {
-								isAFavoriteEntryImage = true
-								return@loop
-							}
-						}
-						if (!isAFavoriteEntryImage) {
-							file.delete()
-						}
+					// If old file and not part of a favorite entry
+					if (file.lastModified() < keepDateBorderTime && !favoriteIds.any { file.name.startsWith(it + ID_SEPARATOR) }) {
+						file.delete()
 					}
 				}
 			}
@@ -516,7 +514,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 		val isFromAutoRefresh = intent.getBooleanExtra(FROM_AUTO_REFRESH, false)
 
-		val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 		val networkInfo = connectivityManager.activeNetworkInfo
 		// Connectivity issue, we quit
 		if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {

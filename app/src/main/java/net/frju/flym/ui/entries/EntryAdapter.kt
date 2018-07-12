@@ -17,6 +17,7 @@
 
 package net.frju.flym.ui.entries
 
+import android.annotation.SuppressLint
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -44,10 +45,10 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EntryWithFeed>() {
 
             override fun areItemsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
-                    oldItem.id == newItem.id
+                    oldItem.entry.id == newItem.entry.id
 
             override fun areContentsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
-                    oldItem.id == newItem.id && oldItem.read == newItem.read && oldItem.favorite == newItem.favorite // no need to do more complex in our case
+                    oldItem.entry.id == newItem.entry.id && oldItem.entry.read == newItem.entry.read && oldItem.entry.favorite == newItem.entry.favorite // no need to do more complex in our case
         }
 
         @JvmField
@@ -55,16 +56,11 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(entry: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
-            title.isEnabled = !entry.read
-            title.text = entry.title
+        @SuppressLint("SetTextI18n")
+        fun bind(entryWithFeed: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
+            val mainImgUrl = if (TextUtils.isEmpty(entryWithFeed.entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entryWithFeed.entry.id, entryWithFeed.entry.imageLink!!)
 
-            feed_name.isEnabled = !entry.read
-            feed_name.text = entry.feedTitle.orEmpty()
-
-            val mainImgUrl = if (TextUtils.isEmpty(entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entry.id, entry.imageLink!!)
-
-            val letterDrawable = Feed.getLetterDrawable(entry.feedId, entry.feedTitle)
+            val letterDrawable = Feed.getLetterDrawable(entryWithFeed.entry.feedId, entryWithFeed.feedTitle)
             if (mainImgUrl != null) {
                 GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
             } else {
@@ -72,14 +68,23 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
                 main_icon.setImageDrawable(letterDrawable)
             }
 
-            if (entry.favorite) {
+            title.isEnabled = !entryWithFeed.entry.read
+            title.text = entryWithFeed.entry.title
+
+            feed_name_layout.isEnabled = !entryWithFeed.entry.read
+            feed_name_layout.text = entryWithFeed.feedTitle.orEmpty()
+
+            date.isEnabled = !entryWithFeed.entry.read
+            date.text = entryWithFeed.entry.getReadablePublicationDate(context)
+
+            if (entryWithFeed.entry.favorite) {
                 favorite_icon.setImageResource(R.drawable.ic_star_white_24dp)
             } else {
                 favorite_icon.setImageResource(R.drawable.ic_star_border_white_24dp)
             }
-            favorite_icon.onClick { favoriteClickListener(entry, favorite_icon) }
+            favorite_icon.onClick { favoriteClickListener(entryWithFeed, favorite_icon) }
 
-            onClick { globalClickListener(entry) }
+            onClick { globalClickListener(entryWithFeed) }
         }
 
         fun clear() = with(itemView) {
@@ -93,16 +98,16 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
     }
 
     override fun onBindViewHolder(holder: EntryAdapter.ViewHolder, position: Int) {
-        val entry = getItem(position)
-        if (entry != null) {
-            holder.bind(entry, globalClickListener, favoriteClickListener)
+        val entryWithFeed = getItem(position)
+        if (entryWithFeed != null) {
+            holder.bind(entryWithFeed, globalClickListener, favoriteClickListener)
         } else {
             // Null defines a placeholder item - PagedListAdapter will automatically invalidate
             // this row when the actual object is loaded from the database
             holder.clear()
         }
 
-        holder.itemView.isSelected = (selectedEntryId == entry?.id)
+        holder.itemView.isSelected = (selectedEntryId == entryWithFeed?.entry?.id)
     }
 
     var selectedEntryId: String? = null

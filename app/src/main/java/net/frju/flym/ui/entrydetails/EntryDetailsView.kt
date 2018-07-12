@@ -25,7 +25,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.support.v4.content.FileProvider.getUriForFile
-import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -42,7 +41,7 @@ import java.io.IOException
 
 private const val TEXT_HTML = "text/html"
 private const val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
-private const val BACKGROUND_COLOR = "#2B2B2B"
+private const val BACKGROUND_COLOR = "#202020"
 private const val QUOTE_BACKGROUND_COLOR = "#383b3f"
 private const val QUOTE_LEFT_COLOR = "#686b6f"
 private const val TEXT_COLOR = "#C0C0C0"
@@ -64,7 +63,7 @@ private const val CSS = "<head><style type='text/css'> " +
         "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} " +
         "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} " +
         "</style><meta name='viewport' content='width=device-width'/></head>"
-private const val BODY_START = "<body>"
+private const val BODY_START = "<body dir=\"auto\">"
 private const val BODY_END = "</body>"
 private const val TITLE_START = "<h1><a href='"
 private const val TITLE_MIDDLE = "'>"
@@ -89,7 +88,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR))
 
         // Text zoom level from preferences
-        val fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"))
+		val fontSize = PrefUtils.getString(PrefUtils.FONT_SIZE, "0").toInt()
         if (fontSize != 0) {
             settings.textZoom = 100 + fontSize * 20
         }
@@ -120,14 +119,15 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun setEntry(entry: EntryWithFeed?, preferFullText: Boolean) {
-        if (entry == null) {
+    fun setEntry(entryWithFeed: EntryWithFeed?, preferFullText: Boolean) {
+        if (entryWithFeed == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-            var contentText = if (preferFullText) entry.mobilizedContent
-                    ?: entry.description.orEmpty() else entry.description.orEmpty()
+            var contentText = if (preferFullText) entryWithFeed.entry.mobilizedContent
+                    ?: entryWithFeed.entry.description.orEmpty() else entryWithFeed.entry.description.orEmpty()
+
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
-                contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
+                contentText = HtmlUtils.replaceImageURLs(contentText, entryWithFeed.entry.id)
                 if (settings.blockNetworkImage) {
                     // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                     loadData("", TEXT_HTML, UTF8)
@@ -138,15 +138,14 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
                 settings.blockNetworkImage = true
             }
 
-            val subtitle = StringBuilder(DateFormat.getLongDateFormat(context).format(entry.publicationDate)).append(' ').append(
-                    DateFormat.getTimeFormat(context).format(entry.publicationDate))
-            if (entry.author?.isNotEmpty() == true) {
-                subtitle.append(" &mdash; ").append(entry.author)
+            val subtitle = StringBuilder(entryWithFeed.entry.getReadablePublicationDate(context))
+            if (entryWithFeed.entry.author?.isNotEmpty() == true) {
+                subtitle.append(" &mdash; ").append(entryWithFeed.entry.author)
             }
 
             val html = StringBuilder(CSS)
                     .append(BODY_START)
-                    .append(TITLE_START).append(entry.link).append(TITLE_MIDDLE).append(entry.title).append(TITLE_END)
+                    .append(TITLE_START).append(entryWithFeed.entry.link).append(TITLE_MIDDLE).append(entryWithFeed.entry.title).append(TITLE_END)
                     .append(SUBTITLE_START).append(subtitle).append(SUBTITLE_END)
                     .append(contentText)
                     .append(BODY_END)

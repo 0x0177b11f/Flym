@@ -22,12 +22,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
@@ -35,7 +30,7 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
 import org.jetbrains.anko.doAsync
-import java.util.UUID
+import java.util.*
 
 
 class FeedListEditFragment : Fragment() {
@@ -67,38 +62,38 @@ class FeedListEditFragment : Fragment() {
                     val toIsTopLevel = feedAdapter.getItemViewType(posTo) == BaseFeedAdapter.TYPE_TOP_LEVEL
 
                     val fromFeed = feedAdapter.getFeedAtPos(posFrom)
-                    val fromIsFeedWithoutGroup = fromIsTopLevel && !fromFeed.isGroup
+                    val fromIsFeedWithoutGroup = fromIsTopLevel && !fromFeed.feed.isGroup
 
                     val toFeed = feedAdapter.getFeedAtPos(posTo)
-                    val toIsFeedWithoutGroup = toIsTopLevel && !toFeed.isGroup
+                    val toIsFeedWithoutGroup = toIsTopLevel && !toFeed.feed.isGroup
 
                     if ((fromIsFeedWithoutGroup || !fromIsTopLevel) && toIsTopLevel && !toIsFeedWithoutGroup) {
                         AlertDialog.Builder(activity)
                                 .setTitle(R.string.to_group_title)
                                 .setMessage(R.string.to_group_message)
                                 .setPositiveButton(R.string.to_group_into) { dialog, which ->
-                                    fromFeed.groupId = toFeed.id
-                                    changeItemPriority(fromFeed, 1) // TODO would be better at the end instead of beginning
+                                    fromFeed.feed.groupId = toFeed.feed.id
+                                    changeItemPriority(fromFeed.feed, 1) // TODO would be better at the end instead of beginning
                                 }.setNegativeButton(R.string.to_group_above) { dialog, which ->
-                                    fromFeed.groupId = toFeed.groupId
-                                    changeItemPriority(fromFeed, toFeed.displayPriority)
+                                    fromFeed.feed.groupId = toFeed.feed.groupId
+                                    changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
                                 }.show()
                     } else {
-                        fromFeed.groupId = toFeed.groupId
-                        changeItemPriority(fromFeed, toFeed.displayPriority)
+                        fromFeed.feed.groupId = toFeed.feed.groupId
+                        changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
                     }
                 }
             }
         }
 
-        App.db.feedDao().observeAll.observe(this, Observer {
+        App.db.feedDao().observeAllWithCount.observe(this, Observer {
             it?.let {
                 feedGroups.clear()
 
-                val subFeedMap = it.groupBy { it.groupId }
+                val subFeedMap = it.groupBy { it.feed.groupId }
 
                 feedGroups.addAll(
-                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
+                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.feed.id].orEmpty()) }.orEmpty()
                 )
 
                 feedAdapter.notifyParentDataSetChanged(true)

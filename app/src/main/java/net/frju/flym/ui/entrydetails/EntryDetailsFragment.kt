@@ -48,24 +48,25 @@ class EntryDetailsFragment : Fragment() {
 
 	companion object {
 
-		const val ARG_ENTRY = "ARG_ENTRY"
+		const val ARG_ENTRY_ID = "ARG_ENTRY_ID"
 		const val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
 
-		fun newInstance(entry: EntryWithFeed, allEntryIds: List<String>): EntryDetailsFragment {
+		fun newInstance(entryId: String, allEntryIds: List<String>): EntryDetailsFragment {
 			return EntryDetailsFragment().apply {
-				arguments = bundleOf(ARG_ENTRY to entry, ARG_ALL_ENTRIES_IDS to allEntryIds)
+				arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds)
 			}
 		}
 	}
 
 	private val navigator: MainNavigator? by lazy { activity as? MainNavigator }
 
-	private lateinit var entry: EntryWithFeed
+	private lateinit var entryId: String
+	private var entryWithFeed: EntryWithFeed? = null
 	private var allEntryIds = emptyList<String>()
 		set(value) {
 			field = value
 
-			val currentIdx = value.indexOf(entry.id)
+			val currentIdx = value.indexOf(entryId)
 
 			previousId = if (currentIdx <= 0) {
 				null
@@ -82,6 +83,7 @@ class EntryDetailsFragment : Fragment() {
 	private var previousId: String? = null
 	private var nextId: String? = null
 	private var isMobilizingLiveData: LiveData<Int>? = null
+	private var isMobilizing = false
 	private var preferFullText = true
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -100,69 +102,39 @@ class EntryDetailsFragment : Fragment() {
 				R.color.colorAccent,
 				R.color.colorPrimaryDark)
 
-		refresh_layout.isEnabled = false
+		refresh_layout.setOnRefreshListener {
+			switchFullTextMode()
+		}
 
-		doAsync {
-			// getting the parcelable on UI thread can make it sluggish
-			entry = arguments?.getParcelable(ARG_ENTRY)!!
-			allEntryIds = arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!
-
-			uiThread {
-				swipe_view.swipeGestureListener = object : SwipeGestureListener {
-					override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
-						nextId?.let { nextId ->
-							doAsync {
-								App.db.entryDao().findByIdWithFeed(nextId)?.let { newEntry ->
-									uiThread {
-										setEntry(newEntry, allEntryIds)
-										navigator?.setSelectedEntryId(newEntry.id)
-									}
-								}
-							}
-						}
-						return true
-					}
-
-					override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
-						previousId?.let { previousId ->
-							doAsync {
-								App.db.entryDao().findByIdWithFeed(previousId)?.let { newEntry ->
-									uiThread {
-										setEntry(newEntry, allEntryIds)
-										navigator?.setSelectedEntryId(newEntry.id)
-									}
-								}
-							}
-						}
-						return true
-					}
+		swipe_view.swipeGestureListener = object : SwipeGestureListener {
+			override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
+				nextId?.let { nextId ->
+					setEntry(nextId, allEntryIds)
+					navigator?.setSelectedEntryId(nextId)
 				}
+				return true
+			}
 
-				updateUI()
+			override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
+				previousId?.let { previousId ->
+					setEntry(previousId, allEntryIds)
+					navigator?.setSelectedEntryId(previousId)
+				}
+				return true
 			}
 		}
-	}
 
-	private fun updateUI() {
-		doAsync {
-			App.db.entryDao().markAsRead(listOf(entry.id))
-		}
-
-		preferFullText = true
-		entry_view.setEntry(entry, preferFullText)
-
-		initDataObservers()
-
-		setupToolbar()
+		setEntry(arguments?.getString(ARG_ENTRY_ID)!!, arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!)
 	}
 
 	private fun initDataObservers() {
 		isMobilizingLiveData?.removeObservers(this)
 		refresh_layout.isRefreshing = false
 
-		isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entry.id)
+		isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entryId)
 		isMobilizingLiveData?.observe(this, Observer<Int> { count ->
 			if (count ?: 0 > 0) {
+				isMobilizing = true
 				refresh_layout.isRefreshing = true
 
 				// If the service is not started, start it here to avoid an infinite loading
@@ -170,12 +142,12 @@ class EntryDetailsFragment : Fragment() {
 					context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
 				}
 			} else {
-				if (refresh_layout.isRefreshing) {
+				if (isMobilizing) {
 					doAsync {
-						App.db.entryDao().findByIdWithFeed(entry.id)?.let { newEntry ->
+						App.db.entryDao().findByIdWithFeed(entryId)?.let { newEntry ->
 							uiThread {
-								entry = newEntry
-								entry_view.setEntry(entry, preferFullText)
+								entryWithFeed = newEntry
+								entry_view.setEntry(entryWithFeed, preferFullText)
 
 								setupToolbar()
 							}
@@ -183,6 +155,7 @@ class EntryDetailsFragment : Fragment() {
 					}
 				}
 
+				isMobilizing = false
 				refresh_layout.isRefreshing = false
 			}
 		})
@@ -190,102 +163,139 @@ class EntryDetailsFragment : Fragment() {
 
 	private fun setupToolbar() {
 		toolbar.apply {
-			menu.clear()
-			inflateMenu(R.menu.menu_fragment_entry_details)
+			entryWithFeed?.let { entryWithFeed ->
+				title = entryWithFeed.feedTitle
 
-			if (activity?.containers_layout?.hasTwoColumns() != true) {
-				setNavigationIcon(R.drawable.ic_back_white_24dp)
-				setNavigationOnClickListener { activity?.onBackPressed() }
-			}
+				menu.clear()
+				inflateMenu(R.menu.menu_fragment_entry_details)
 
-			if (entry.favorite) {
-				menu.findItem(R.id.menu_entry_details__favorite)
-						.setTitle(R.string.menu_unstar)
-						.setIcon(R.drawable.ic_star_white_24dp)
-			}
-
-
-			if (entry.mobilizedContent == null || !preferFullText) {
-				menu.findItem(R.id.menu_entry_details__fulltext).isVisible = true
-				menu.findItem(R.id.menu_entry_details__original_text).isVisible = false
-			} else {
-				menu.findItem(R.id.menu_entry_details__fulltext).isVisible = false
-				menu.findItem(R.id.menu_entry_details__original_text).isVisible = true
-			}
-
-			setOnMenuItemClickListener { item ->
-				when (item?.itemId) {
-					R.id.menu_entry_details__favorite -> {
-						entry.favorite = !entry.favorite
-						entry.read = true // otherwise it marked it as unread again
-
-						if (entry.favorite) {
-							item.setTitle(R.string.menu_unstar).setIcon(R.drawable.ic_star_white_24dp)
-						} else {
-							item.setTitle(R.string.menu_star).setIcon(R.drawable.ic_star_border_white_24dp)
-						}
-
-						doAsync {
-							App.db.entryDao().update(entry)
-						}
-					}
-					R.id.menu_entry_details__open_browser -> {
-						startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.link)))
-					}
-					R.id.menu_entry_details__share -> {
-						startActivity(Intent.createChooser(
-								Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, entry.link)
-										.setType("text/plain"), getString(R.string.menu_share)
-						))
-					}
-					R.id.menu_entry_details__fulltext -> {
-						if (entry.mobilizedContent == null) {
-							this@EntryDetailsFragment.context?.let { c ->
-								if (c.isOnline()) {
-									doAsync {
-										FetcherService.addEntriesToMobilize(listOf(entry.id))
-										c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
-									}
-								} else {
-									toast(R.string.network_error).show()
-								}
-							}
-						} else {
-							preferFullText = true
-							entry_view.setEntry(entry, preferFullText)
-
-							setupToolbar()
-						}
-					}
-					R.id.menu_entry_details__original_text -> {
-						preferFullText = false
-						entry_view.setEntry(entry, preferFullText)
-
-						setupToolbar()
-					}
-					R.id.menu_entry_details__mark_as_unread -> {
-						doAsync {
-							App.db.entryDao().markAsUnread(listOf(entry.id))
-						}
-						if (activity?.containers_layout?.hasTwoColumns() != true) {
-							activity?.onBackPressed()
-						}
-					}
-					else -> {
-					}
+				if (activity?.containers_layout?.hasTwoColumns() != true) {
+					setNavigationIcon(R.drawable.ic_back_white_24dp)
+					setNavigationOnClickListener { activity?.onBackPressed() }
 				}
 
-				true
+				if (entryWithFeed.entry.favorite) {
+					menu.findItem(R.id.menu_entry_details__favorite)
+							.setTitle(R.string.menu_unstar)
+							.setIcon(R.drawable.ic_star_white_24dp)
+				}
+
+
+				if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
+					menu.findItem(R.id.menu_entry_details__fulltext).isVisible = true
+					menu.findItem(R.id.menu_entry_details__original_text).isVisible = false
+				} else {
+					menu.findItem(R.id.menu_entry_details__fulltext).isVisible = false
+					menu.findItem(R.id.menu_entry_details__original_text).isVisible = true
+				}
+
+				setOnMenuItemClickListener { item ->
+					when (item?.itemId) {
+						R.id.menu_entry_details__favorite -> {
+							entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
+							entryWithFeed.entry.read = true // otherwise it marked it as unread again
+
+							if (entryWithFeed.entry.favorite) {
+								item.setTitle(R.string.menu_unstar).setIcon(R.drawable.ic_star_white_24dp)
+							} else {
+								item.setTitle(R.string.menu_star).setIcon(R.drawable.ic_star_border_white_24dp)
+							}
+
+							doAsync {
+								App.db.entryDao().update(entryWithFeed.entry)
+							}
+						}
+						R.id.menu_entry_details__open_browser -> {
+							try {
+								startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entryWithFeed.entry.link)))
+							} catch (e: Exception) {
+								toast(R.string.error) // TODO better error message, can be ActivityNotFoundException if no browser or NPE if no link
+							}
+						}
+						R.id.menu_entry_details__share -> {
+							startActivity(Intent.createChooser(
+									Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, entryWithFeed.entry.title).putExtra(Intent.EXTRA_TEXT, entryWithFeed.entry.link)
+											.setType("text/plain"), getString(R.string.menu_share)
+							))
+						}
+						R.id.menu_entry_details__fulltext -> {
+							switchFullTextMode()
+						}
+						R.id.menu_entry_details__original_text -> {
+							switchFullTextMode()
+						}
+						R.id.menu_entry_details__mark_as_unread -> {
+							doAsync {
+								App.db.entryDao().markAsUnread(listOf(entryId))
+							}
+							if (activity?.containers_layout?.hasTwoColumns() != true) {
+								activity?.onBackPressed()
+							}
+						}
+						else -> {
+						}
+					}
+
+					true
+				}
 			}
 		}
 	}
 
-	fun setEntry(entry: EntryWithFeed, allEntryIds: List<String>) {
-		this.entry = entry
+	private fun switchFullTextMode() {
+		entryWithFeed?.let { entryWithFeed ->
+			if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
+				if (entryWithFeed.entry.mobilizedContent == null) {
+					this@EntryDetailsFragment.context?.let { c ->
+						if (c.isOnline()) {
+							doAsync {
+								FetcherService.addEntriesToMobilize(listOf(entryWithFeed.entry.id))
+								c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
+							}
+						} else {
+							refresh_layout.isRefreshing = false
+							toast(R.string.network_error).show()
+						}
+					}
+				} else {
+					refresh_layout.isRefreshing = false
+					preferFullText = true
+					entry_view.setEntry(entryWithFeed, preferFullText)
+
+					setupToolbar()
+				}
+			} else {
+				refresh_layout.isRefreshing = isMobilizing
+				preferFullText = false
+				entry_view.setEntry(entryWithFeed, preferFullText)
+
+				setupToolbar()
+			}
+		}
+	}
+
+	fun setEntry(entryId: String, allEntryIds: List<String>) {
+		this.entryId = entryId
 		this.allEntryIds = allEntryIds
-		arguments?.putParcelable(ARG_ENTRY, entry)
+		arguments?.putString(ARG_ENTRY_ID, entryId)
 		arguments?.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))
 
-		updateUI()
+		doAsync {
+			App.db.entryDao().findByIdWithFeed(entryId)?.let { entry ->
+				entryWithFeed = entry
+				preferFullText = true
+				isMobilizing = false
+
+				uiThread {
+					entry_view.setEntry(entryWithFeed, preferFullText)
+
+					initDataObservers()
+
+					setupToolbar()
+				}
+			}
+
+			App.db.entryDao().markAsRead(listOf(entryId))
+		}
 	}
 }

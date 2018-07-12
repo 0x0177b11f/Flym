@@ -28,8 +28,8 @@
     <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Configurações</string>
-    <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder</string>
+    <string name="menu_edit_feed">Editar feed</string>
+    <string name="menu_reorder">Reorder feeds</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
     <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
@@ -38,6 +38,7 @@
     <string name="error">Erro</string>
     <string name="network_error">A internet não está disponível</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -48,7 +49,7 @@
     <string name="error_feed_export">A exportação falhou. Tenha certeza que você possui um cartão SD montado.</string>
     <string name="error_external_storage_not_available">O armazenamento externo (Ex. cartão SD) não está disponível.</string>
     <string name="feed_search">Busca no Feed</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Você tem certeza que deseja deletar este feed?</string>
     <string name="question_delete_group">Você tem certeza que deseja deletar este grupo e todos os seus feeds?</string>
@@ -65,6 +66,8 @@
     <string name="google_news_entertainment">Entretenimento</string>
     <string name="google_news_sports">Esportes</string>
     <string name="google_news_health">Saúde</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Todas as entradas</string>
@@ -76,8 +79,12 @@
     <string name="original_text">Mostrar o texto original</string>
     <string name="open_in_browser">Ver no navegador</string>
     <string name="cant_open_link">Nenhum aplicativo encontrado para este link</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">Desfazer</string>
+    <string name="marked_as_read">Marcado como lido</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Atualização automática</string>

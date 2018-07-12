@@ -14,8 +14,8 @@ android {
 		applicationId "net.frju.flym"
 		minSdkVersion 21
 		targetSdkVersion 27
-		versionCode 4
-		versionName "2.0.2"
+		versionCode 12
+		versionName "2.0.9"
 	}
 
 	lintOptions {
@@ -74,7 +74,7 @@ dependencies {
 	implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 	kapt "android.arch.lifecycle:compiler:$lifecycle_version"
 
-	def room_version = "1.1.0"
+	def room_version = "1.1.1"
 	implementation "android.arch.persistence.room:runtime:$room_version"
 	kapt "android.arch.persistence.room:compiler:$room_version"
 
@@ -83,11 +83,6 @@ dependencies {
 	implementation "com.android.support:design:$support_version"
 	implementation "com.android.support:cardview-v7:$support_version"
 	implementation "com.android.support:recyclerview-v7:$support_version"
-
-	def paperparcel_version = '2.0.6'
-	implementation "nz.bradcampbell:paperparcel:$paperparcel_version"
-	implementation "nz.bradcampbell:paperparcel-kotlin:$paperparcel_version"
-	kapt "nz.bradcampbell:paperparcel-compiler:$paperparcel_version"
 
 	def anko_version = '0.10.5'
 	implementation "org.jetbrains.anko:anko-sdk21:$anko_version"
@@ -104,7 +99,7 @@ dependencies {
 	kapt "com.github.bumptech.glide:compiler:$glide_version"
 
 	implementation 'androidx.core:core-ktx:0.3'
-	implementation "android.arch.paging:runtime:1.0.0"
+	implementation "android.arch.paging:runtime:1.0.1"
 	implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 	implementation 'org.jsoup:jsoup:1.11.3'
 	implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'

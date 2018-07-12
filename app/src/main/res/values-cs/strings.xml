@@ -30,8 +30,8 @@
     <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Nastavení</string>
-    <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder</string>
+    <string name="menu_edit_feed">Upravit zdroj</string>
+    <string name="menu_reorder">Reorder feeds</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
     <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
@@ -40,6 +40,7 @@
     <string name="error">Chyba</string>
     <string name="network_error">Síť není nastavena</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Zdroje</string>
@@ -54,7 +55,7 @@
         dostupný.
     </string>
     <string name="feed_search">Prohledat zdroj</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Opravdu smazat tento zdroj?</string>
     <string name="question_delete_group">Opravdu chcete smazat tuto skupinu a všechny její
@@ -75,6 +76,8 @@
     <string name="google_news_entertainment">Zábava</string>
     <string name="google_news_sports">Sporty</string>
     <string name="google_news_health">Zdraví</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Všechny články</string>
@@ -86,8 +89,12 @@
     <string name="original_text">Zobrazit originální text</string>
 	<string name="open_in_browser">Zobrazit v prohlížeči</string>
     <string name="cant_open_link">Pro tento odkaz nebyla nalezena žádná aplikace</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">Vrátit</string>
+    <string name="marked_as_read">Označeno jako přečtené</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatické načítání</string>
