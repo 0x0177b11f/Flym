@@ -17,21 +17,21 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "tasks",
-		primaryKeys = ["entryId", "imageLinkToDl"],
-		indices = [(Index(value = ["entryId"]))],
-		foreignKeys = [(ForeignKey(entity = Entry::class,
-				parentColumns = ["id"],
-				childColumns = ["entryId"],
-				onDelete = ForeignKey.CASCADE))])
+        primaryKeys = ["entryId", "imageLinkToDl"],
+        indices = [(Index(value = ["entryId"]))],
+        foreignKeys = [(ForeignKey(entity = Entry::class,
+                parentColumns = ["id"],
+                childColumns = ["entryId"],
+                onDelete = ForeignKey.CASCADE))])
 data class Task(
-		var entryId: String = "",
-		var imageLinkToDl: String = "",
-		var numberAttempt: Int = 0) : Parcelable
+        var entryId: String = "",
+        var imageLinkToDl: String = "",
+        var numberAttempt: Int = 0) : Parcelable

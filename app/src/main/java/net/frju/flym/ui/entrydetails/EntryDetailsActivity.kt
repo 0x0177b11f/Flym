@@ -18,31 +18,42 @@
 package net.frju.flym.ui.entrydetails
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.util.TypedValue
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import net.fred.feedex.R
+import net.frju.flym.utils.setupNoActionBarTheme
+import org.jetbrains.anko.backgroundColor
 
 class EntryDetailsActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setupNoActionBarTheme()
 
-		if (savedInstanceState == null) {
-			val fragment = EntryDetailsFragment().apply {
-				arguments = intent.extras
-			}
+        super.onCreate(savedInstanceState)
 
-			supportFragmentManager
-					.beginTransaction()
-					.replace(android.R.id.content, fragment)
-					.commitAllowingStateLoss()
-		}
-	}
+        val tv = TypedValue()
+        if (theme.resolveAttribute(R.attr.colorPrimary, tv, true)) {
+            window.decorView.backgroundColor = tv.data
+        }
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		when (item?.itemId) {
-			android.R.id.home -> onBackPressed()
-		}
+        if (savedInstanceState == null) {
+            val fragment = EntryDetailsFragment().apply {
+                arguments = intent.extras
+            }
 
-		return false
-	}
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(android.R.id.content, fragment)
+                    .commitAllowingStateLoss()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+
+        return false
+    }
 }

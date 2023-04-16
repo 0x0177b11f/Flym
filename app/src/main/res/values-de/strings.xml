@@ -1,58 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
- Copyright (c) 2010-2012 Stefan Handschuh
- Copyright (c) 2012-2014 Frederic Julian
-      modified 2014-2016 Matthias Dill
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
 <resources>
-
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Ein neuer Eintrag</item>
+        <item quantity="other">%d neue Einträge</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">Über Flym</string>
     <string name="welcome_title">Willkommen bei Flym. Willst du einen Feed hinzufügen?</string>
-    <string name="welcome_title_with_opml_import">Möchtest du frühere Flym-Feeds importieren?</string>
     <string name="cannot_find_feeds">Keine Feeds gefunden</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_edit_feed">Feed bearbeiten</string>
     <string name="menu_reorder">Feeds neu ordnen</string>
     <string name="menu_delete">Löschen</string>
-    <string name="menu_enable_full_text_retrieval">Volltextsuche aktivieren</string>
-    <string name="menu_disable_full_text_retrieval">Volltextsuche deaktivieren</string>
+    <string name="menu_enable_full_text_retrieval">Ganzen Text abrufen</string>
+    <string name="menu_disable_full_text_retrieval">Nur Teaser abrufen</string>
     <string name="menu_all_read">Alle als gelesen markieren</string>
     <string name="flym_feeds">Flym-Feeds</string>
     <string name="error">Fehler</string>
     <string name="network_error">Kein Internet</string>
     <string name="drawer_explanation">Willkommen!\n\nLänger auf die Feeds drücken, um die Optionen zu sehen ▼</string>
     <string name="drawer_fetch_error_explanation">Einige deiner Feeds wurden nicht korrekt aktualisiert ▼</string>
-
+    <string name="about_screen_info">Ich veröffentliche diese App als freie und Open Source-Software unter der GPLv3-Lizenz. Jegliche Änderungen sind möglich, solange auch sie Open Source sind.</string>
+    <string name="navigation_button_content_description">Feed-Menü umschalten</string>
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
     <string name="menu_add_group">Gruppe erstellen</string>
-    <string name="menu_import">Aus OPML importieren</string>
-    <string name="menu_export">Nach OPML exportieren</string>
+    <string name="menu_import">Import aus OPML</string>
+    <string name="menu_export">Export nach OPML</string>
     <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Programm die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
-    <string name="error_external_storage_not_available">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
     <string name="feed_search">Feed-Suche</string>
-	<string name="feed_search_hint">Feed-Link oder Suchbegriff eingeben</string>
+    <string name="feed_search_hint">Feed-Link oder Suchbegriff eingeben</string>
     <string name="feed_added">Feed zur Liste hinzugefügt</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
     <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>
@@ -62,25 +41,19 @@
     <string name="to_group_message">Du kannst den Feed entweder in oder über dieser Gruppe positionieren. Was willst du tun?</string>
     <string name="to_group_above">Über die Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
-    <string name="google_news_top_stories">Schlagzeilen</string>
-    <string name="google_news_world">International</string>
-    <string name="google_news_business">Wirtschaft</string>
-    <string name="google_news_science_technology">Wissenschaft &amp; Technik</string>
-    <string name="google_news_entertainment">Unterhaltung</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Gesundheit</string>
     <string name="feed_name">Feed-Name</string>
-    <string name="feed_link">Feed-Link</string>
-
+    <string name="feed_edit_drag_handle_content_description">Handhabung der Verschiebung</string>
+    <string name="feed_edit_feed_icon_content_description">Feed-Symbol</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Feed-Link</string>
     <string name="all_entries">Alle Einträge</string>
     <string name="menu_star">Favorisieren</string>
     <string name="menu_unstar">Entfavorisieren</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_mark_as_unread">Als ungelesen markieren</string>
-    <string name="get_full_text">Vollen Text abrufen</string>
+    <string name="get_full_text">Ganzen Text abrufen</string>
     <string name="original_text">Ursprünglichen Text anzeigen</string>
-	<string name="open_in_browser">Im Browser ansehen</string>
+    <string name="open_in_browser">Im Browser ansehen</string>
     <string name="cant_open_link">Keine Anwendung für diesen Link gefunden</string>
     <string name="unreads">Ungelesen</string>
     <string name="all">Alle</string>
@@ -88,26 +61,72 @@
     <string name="no_entries">Keine Artikel\nZum Aktualisieren bitte nach unten ziehen</string>
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
-
+    <string name="marked_as_unread">Als ungelesen markieren</string>
+    <string name="expand_arrow_content_description">Feed-Gruppe ausklappen</string>
+    <string name="collapse_arrow_content_description">Feed-Gruppe einklappen</string>
+    <string name="mark_all_as_read_fab_content_description">Alle als gelesen markieren</string>
+    <!-- DISCOVER -->
+    <string name="discover_search_label">Feeds suchen</string>
+    <string name="discover_search_hint">Suche nach Stichwort, URL oder Themen. Themen können mit #-Präfix angezeigt werden.</string>
+    <string-array name="discover_topics">
+        <item>Nachrichten</item>
+        <item>Politik</item>
+        <item>Welt</item>
+        <item>Maschinenbau</item>
+        <item>Technik</item>
+        <item>Startups</item>
+        <item>Telekommunikation</item>
+        <item>Cybersecurity</item>
+        <item>Datenschutz</item>
+        <item>Wissenschaft</item>
+        <item>Medizin</item>
+        <item>Gesundheitswesen</item>
+        <item>Bildung</item>
+        <item>Wirtschaft</item>
+        <item>Marketing</item>
+        <item>Weltraum</item>
+        <item>Design</item>
+        <item>Comics</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Unbenannt</string>
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
-    <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
+    <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
+    <string name="settings_refresh_enable_notifications">Aktualisierungsbenachrichtigungen anzeigen</string>
+    <string name="settings_refresh_enable_notifications_description">Zeigt eine Benachrichtigung an, wenn eine Aktualisierung abgeschlossen ist</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
-    <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
-    <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
+    <string name="settings_keep_time">Zeit, in der die gelesenen Einträge erhalten bleiben</string>
+    <string name="settings_keep_time_unread">Zeit, in der die ungelesenen Einträge erhalten bleiben</string>
+    <string name="settings_category_general">Allgemein</string>
+    <string name="settings_display_thumbnails">Vorschaubilder anzeigen</string>
+    <string name="settings_display_thumbnails_description">Vorschaubilder in der Artikelliste anzeigen</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
-    <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
-
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Ein neuer Eintrag</item>
-        <item quantity="other">%d neue Einträge</item>
-    </plurals>
-
+    <string name="settings_refresh_wifi_only_description">Automatische Aktualisierung wird nur durchgeführt, wenn eine WLAN-Verbindung verfügbar ist</string>
+    <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
+    <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
+    <string name="filter">Einträge entfernen, die Suchbegriffe enthalten</string>
+    <string name="filter_title">Sperrliste</string>
+    <string name="filter_dialog_message">Suchbegriffe mit Kommas trennen</string>
+    <string name="settings_theme">Thema</string>
+    <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
+    <string name="open_browser_direct_title">Im Browser öffnen</string>
+    <string name="refresh_on_startup">Aktualisiert alle Feeds, sobald die Anwendung gestartet wird</string>
+    <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
+    <string name="settings_hide_button_mark_all_as_read">Button ausblenden \'Als gelesen markieren\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Button \'Als gelesen markieren\' auf dem Bildschirm nicht anzeigen</string>
+    <string name="settings_hide_navigation_on_scroll">Navigation beim Scrollen ausblenden</string>
+    <string name="settings_hide_navigation_on_scroll_description">Wenn dies aktiviert ist, wird die obere/untere Navigation beim Herunterscrollen ausgeblendet und beim Hochscrollen wieder eingeblendet</string>
+    <string name="settings_sort_order">Einträge vom neuesten zum ältesten sortieren</string>
+    <string name="settings_sort_order_title">Sortierreihenfolge</string>
+    <string name="settings_enable_entry_swipe">Wischen beim Anzeigen eines Eintrags aktivieren</string>
+    <string name="settings_category_article_list">Artikelliste</string>
+    <string name="settings_category_article_appearance">Erscheinungsbild der Artikel</string>
+    <string name="settings_enable_entry_swipe_description">Wenn dies aktiviert ist, kann während der Anzeige eines Eintrags zwischen den Einträgen gewechselt werden</string>
     <string-array name="settings_intervals">
         <item>5 Minuten</item>
         <item>15 Minuten</item>
@@ -142,5 +161,9 @@
         <item>Nur über WLAN</item>
         <item>Immer</item>
     </string-array>
-
+    <string-array name="settings_themes">
+        <item>Hell</item>
+        <item>Dunkel</item>
+        <item>Schwarz</item>
+    </string-array>
 </resources>

@@ -18,26 +18,37 @@
 package net.frju.flym.ui.settings
 
 import android.os.Bundle
-import android.preference.Preference
-import android.preference.PreferenceFragment
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import net.fred.feedex.R
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants.REFRESH_ENABLED
+import net.frju.flym.data.utils.PrefConstants.REFRESH_INTERVAL
+import net.frju.flym.data.utils.PrefConstants.THEME
 import net.frju.flym.service.AutoRefreshJobService
+import net.frju.flym.ui.main.MainActivity
+import net.frju.flym.ui.views.AutoSummaryListPreference
+import org.jetbrains.anko.support.v4.startActivity
 
 
-class SettingsFragment : PreferenceFragment() {
+class SettingsFragment : PreferenceFragmentCompat() {
 
-	private val onRefreshChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-		AutoRefreshJobService.initAutoRefresh(activity)
-		true
-	}
+    private val onRefreshChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+        AutoRefreshJobService.initAutoRefresh(requireContext())
+        true
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.settings, rootKey)
 
-		addPreferencesFromResource(R.xml.settings)
+        findPreference<CheckBoxPreference>(REFRESH_ENABLED)?.onPreferenceChangeListener = onRefreshChangeListener
+        findPreference<AutoSummaryListPreference>(REFRESH_INTERVAL)?.onPreferenceChangeListener = onRefreshChangeListener
 
-		findPreference(PrefUtils.REFRESH_ENABLED)?.onPreferenceChangeListener = onRefreshChangeListener
-		findPreference(PrefUtils.REFRESH_INTERVAL)?.onPreferenceChangeListener = onRefreshChangeListener
-	}
+        findPreference<AutoSummaryListPreference>(THEME)?.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, _ ->
+                    activity?.finishAffinity()
+                    startActivity<MainActivity>()
+                    true
+                }
+    }
 }

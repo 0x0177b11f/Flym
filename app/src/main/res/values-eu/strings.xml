@@ -1,32 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2012-2015 Frederic Julian
- Copyright (c) 2010-2012 Stefan Handschuh
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Sarrera berri bat</item>
+        <item quantity="other">%d sarrera berri</item>
+    </plurals>
     <string name="about_flym">Flymi buruz</string>
     <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahi al zenuke?</string>
-    <string name="welcome_title_with_opml_import">Flymeko aurreko jarioak inportatu nahi al zenituzke?</string>
     <string name="cannot_find_feeds">Ez da jariorik aurkitu</string>
     <string name="menu_settings">Ezarpenak</string>
     <string name="menu_edit_feed">Jarioa editatu</string>
@@ -40,7 +20,6 @@
     <string name="network_error">Sarea ez dago konfiguratuta</string>
     <string name="drawer_explanation">Ongi etorri!\n\nSakatu luze jarioetan aukerak ikusteko ▼</string>
     <string name="drawer_fetch_error_explanation">Zure jarioetako batzuk ez dira behar bezala freskatu ▼</string>
-
     <!-- FEEDS -->
     <string name="feeds">Jarioak</string>
     <string name="menu_add_group">Taldea gehitu</string>
@@ -50,34 +29,21 @@
     <string name="error_feed_export">Esportazioak huts egin du. Egiaztatu idatz daitekeen SD-txartel bat
         muntatuta duzula.
     </string>
-	<string name="error_external_storage_not_available">Kanpoko biltegia (adib. SD-txartela) ez dago
-        eskuragarri.
-    </string>
     <string name="feed_search">Jarioen bilaketa</string>
-	<string name="feed_search_hint">Idatz ezazu lotura edo gako hitza</string>
+    <string name="feed_search_hint">Idatz ezazu lotura edo gako hitza</string>
     <string name="feed_added">Jarioa zerrendara gehitu da</string>
     <string name="question_delete_feed">Benetan jario hau ezabatu nahi al duzu?</string>
-	<string name="question_delete_group">Benetan talde hau eta bere jario guztiak ezabatu nahi
+    <string name="question_delete_group">Benetan talde hau eta bere jario guztiak ezabatu nahi
         al dituzu?
     </string>
     <string name="add_group_title">Hautatu taldearen izena</string>
     <string name="message_exported_to">%s(e)ra esportatuta.</string>
     <string name="to_group_title">Jario mugitze ekintza</string>
-	<string name="to_group_message">Jario hau talde honetan edo honen gainean jar dezakezu. Zer egin
+    <string name="to_group_message">Jario hau talde honetan edo honen gainean jar dezakezu. Zer egin
         nahi duzu?
     </string>
     <string name="to_group_above">Taldearen gainean</string>
     <string name="to_group_into">Taldearen barruan</string>
-    <string name="google_news_top_stories">Berri nagusiak</string>
-    <string name="google_news_world">Mundua</string>
-    <string name="google_news_business">Negozioak</string>
-    <string name="google_news_science_technology">Zientzia eta teknologia</string>
-    <string name="google_news_entertainment">Denbora-pasa</string>
-    <string name="google_news_sports">Kirolak</string>
-    <string name="google_news_health">Osasuna</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Sarrera guztiak</string>
     <string name="menu_star">Gogokoenetara gehitu</string>
@@ -86,7 +52,7 @@
     <string name="menu_mark_as_unread">Ez irakurrita bezala markatu</string>
     <string name="get_full_text">Testu osoa eskuratu</string>
     <string name="original_text">Jatorrizko testua erakutsi</string>
-	<string name="open_in_browser">Nabigatzailean ikusi</string>
+    <string name="open_in_browser">Nabigatzailean ikusi</string>
     <string name="cant_open_link">Ez da aplikaziorik aurkitu esteka honetarako</string>
     <string name="unreads">Irakurri gabekoak</string>
     <string name="all">Guztia</string>
@@ -94,15 +60,15 @@
     <string name="no_entries">Elementurik ez\nMesedez tiratu beherantz freskatzeko</string>
     <string name="undo">Desegin</string>
     <string name="marked_as_read">Irakurrita bezala markatuta</string>
-
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Freskatze automatikoa</string>
     <string name="settings_refresh_enabled">Freskatze automatikoa gaitu</string>
     <string name="settings_refresh_enabled_description">Jarioen freskatze automatikoa gaitu
     </string>
     <string name="settings_refresh_interval">Freskatze tartea</string>
-    <string name="settings_category_content_presentation">Edukien aurkezpena</string>
     <string name="settings_keep_time">Sarrerak gordeta mantenduko diren denbora</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Irudiak erakutsi</string>
     <string name="settings_display_images_description">Irudiak erakutsi sarreretan</string>
     <string name="settings_preload_image_mode">Irudiak aurretik kargatu</string>
@@ -110,12 +76,7 @@
     <string name="settings_refresh_wifi_only">Freskatu soilik Wi-Fipean</string>
     <string name="settings_refresh_wifi_only_description">Freskatze automatikoa soilik Wi-Fi konexioa eskuragarri badago egingo da
     </string>
-
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Sarrera berri bat</item>
-        <item quantity="other">%d sarrera berri</item>
-    </plurals>
-
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string-array name="settings_intervals">
         <item>5 minutu</item>
         <item>15 minutu</item>
@@ -150,5 +111,4 @@
         <item>Wi-Fipean soilik</item>
         <item>Beti</item>
     </string-array>
-
 </resources>

@@ -44,7 +44,7 @@ object HtmlUtils {
     private val IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE)
     private val ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE)
     private val SRCSET_PATTERN = Pattern.compile("\\s+srcset=\\s*['\"]([^'\"\\s]+)[^'\"]*['\"]", Pattern.CASE_INSENSITIVE)
-    private val LAZY_LOADING_PATTERN = Pattern.compile("\\s+src=[^>]+\\s+(original|data)[-]*src=(\"|')", Pattern.CASE_INSENSITIVE)
+    private val LAZY_LOADING_PATTERN = Pattern.compile("\\s+src=[^>]+\\s+original[-]*src=(\"|')", Pattern.CASE_INSENSITIVE)
     private val PIXEL_IMAGE_PATTERN = Pattern.compile("<img\\s+(height=['\"]1['\"]\\s+width=['\"]1['\"]|width=['\"]1['\"]\\s+height=['\"]1['\"])\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE)
     private val NON_HTTP_IMAGE_PATTERN = Pattern.compile("\\s+(href|src)=(\"|')//", Pattern.CASE_INSENSITIVE)
     private val BAD_IMAGE_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)\\.img['\"][^>]*>", Pattern.CASE_INSENSITIVE)
@@ -91,7 +91,7 @@ object HtmlUtils {
             val matcher = IMG_PATTERN.matcher(content)
 
             while (matcher.find()) {
-                images.add(matcher.group(1).replace(" ", URL_SPACE))
+                matcher.group(1)?.replace(" ", URL_SPACE)?.let { images.add(it) }
             }
         }
 
@@ -108,13 +108,13 @@ object HtmlUtils {
 
             val matcher = IMG_PATTERN.matcher(content)
             while (matcher.find()) {
-                val match = matcher.group(1).replace(" ", URL_SPACE)
-
-                val imgPath = FetcherService.getDownloadedImagePath(itemId, match)
-                if (File(imgPath).exists()) {
-                    content = content.replace(match, FILE_SCHEME + imgPath)
-                } else if (needDownloadPictures) {
-                    imagesToDl.add(match)
+                matcher.group(1)?.replace(" ", URL_SPACE)?.let { match ->
+                    val imgPath = FetcherService.getDownloadedImagePath(itemId, match)
+                    if (File(imgPath).exists()) {
+                        content = content.replace(match, FILE_SCHEME + imgPath)
+                    } else if (needDownloadPictures) {
+                        imagesToDl.add(match)
+                    }
                 }
             }
 
@@ -135,7 +135,7 @@ object HtmlUtils {
             val matcher = IMG_PATTERN.matcher(content)
 
             while (matcher.find()) {
-                val imgUrl = matcher.group(1).replace(" ", URL_SPACE)
+                val imgUrl = matcher.group(1)?.replace(" ", URL_SPACE)
                 if (isCorrectImage(imgUrl)) {
                     return imgUrl
                 }
@@ -149,7 +149,11 @@ object HtmlUtils {
         return imgUrls.firstOrNull { isCorrectImage(it) }
     }
 
-    private fun isCorrectImage(imgUrl: String): Boolean {
+    private fun isCorrectImage(imgUrl: String?): Boolean {
+        if (imgUrl == null) {
+            return false
+        }
+
         if (!imgUrl.endsWith(".gif") && !imgUrl.endsWith(".GIF") && !imgUrl.endsWith(".img") && !imgUrl.endsWith(".IMG")) {
             return true
         }

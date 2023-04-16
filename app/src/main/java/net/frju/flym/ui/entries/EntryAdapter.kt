@@ -18,14 +18,14 @@
 package net.frju.flym.ui.entries
 
 import android.annotation.SuppressLint
-import android.arch.paging.PagedListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import kotlinx.android.synthetic.main.view_entry.view.*
@@ -34,10 +34,13 @@ import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.sdk21.listeners.onLongClick
+import org.jetbrains.anko.uiThread
 
 
-class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
+class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListener: (EntryWithFeed) -> Unit, private val globalLongClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
 
@@ -55,36 +58,48 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
         val CROSS_FADE_FACTORY: DrawableCrossFadeFactory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         @SuppressLint("SetTextI18n")
-        fun bind(entryWithFeed: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
-            val mainImgUrl = if (TextUtils.isEmpty(entryWithFeed.entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entryWithFeed.entry.id, entryWithFeed.entry.imageLink!!)
+        fun bind(entryWithFeed: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, globalLongClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
+            doAsync {
+                val mainImgUrl = if (TextUtils.isEmpty(entryWithFeed.entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entryWithFeed.entry.id, entryWithFeed.entry.imageLink!!)
+                uiThread {
+                    val letterDrawable = Feed.getLetterDrawable(entryWithFeed.entry.feedId, entryWithFeed.feedTitle)
+                    if (mainImgUrl != null) {
+                        GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
+                    } else {
+                        GlideApp.with(context).clear(main_icon)
+                        main_icon.setImageDrawable(letterDrawable)
+                    }
 
-            val letterDrawable = Feed.getLetterDrawable(entryWithFeed.entry.feedId, entryWithFeed.feedTitle)
-            if (mainImgUrl != null) {
-                GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
-            } else {
-                GlideApp.with(context).clear(main_icon)
-                main_icon.setImageDrawable(letterDrawable)
+                    main_icon.visibility = if (displayThumbnails) View.VISIBLE else View.GONE
+
+                    title.isEnabled = !entryWithFeed.entry.read
+                    title.text = entryWithFeed.entry.title
+
+                    feed_name_layout.isEnabled = !entryWithFeed.entry.read
+                    feed_name_layout.text = entryWithFeed.feedTitle.orEmpty()
+
+                    date.isEnabled = !entryWithFeed.entry.read
+                    date.text = entryWithFeed.entry.getReadablePublicationDate(context)
+
+                    favorite_icon.alpha = if (!entryWithFeed.entry.read) 1f else 0.5f
+
+                    if (entryWithFeed.entry.favorite) {
+                        favorite_icon.setImageResource(R.drawable.ic_star_24dp)
+                    } else {
+                        favorite_icon.setImageResource(R.drawable.ic_star_border_24dp)
+                    }
+                    favorite_icon.onClick { favoriteClickListener(entryWithFeed, favorite_icon) }
+
+                    onClick { globalClickListener(entryWithFeed) }
+                    onLongClick {
+                        globalLongClickListener(entryWithFeed)
+                        true
+                    }
+                }
             }
-
-            title.isEnabled = !entryWithFeed.entry.read
-            title.text = entryWithFeed.entry.title
-
-            feed_name_layout.isEnabled = !entryWithFeed.entry.read
-            feed_name_layout.text = entryWithFeed.feedTitle.orEmpty()
-
-            date.isEnabled = !entryWithFeed.entry.read
-            date.text = entryWithFeed.entry.getReadablePublicationDate(context)
-
-            if (entryWithFeed.entry.favorite) {
-                favorite_icon.setImageResource(R.drawable.ic_star_white_24dp)
-            } else {
-                favorite_icon.setImageResource(R.drawable.ic_star_border_white_24dp)
-            }
-            favorite_icon.onClick { favoriteClickListener(entryWithFeed, favorite_icon) }
-
-            onClick { globalClickListener(entryWithFeed) }
         }
 
         fun clear() = with(itemView) {
@@ -94,13 +109,13 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_entry, parent, false)
-        return EntryAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: EntryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entryWithFeed = getItem(position)
         if (entryWithFeed != null) {
-            holder.bind(entryWithFeed, globalClickListener, favoriteClickListener)
+            holder.bind(entryWithFeed, globalClickListener, globalLongClickListener, favoriteClickListener)
         } else {
             // Null defines a placeholder item - PagedListAdapter will automatically invalidate
             // this row when the actual object is loaded from the database

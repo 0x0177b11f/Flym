@@ -18,25 +18,28 @@
 package net.frju.flym.ui.feeds
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import net.fred.feedex.R
+import net.frju.flym.utils.setupTheme
 
 class FeedListEditActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setupTheme()
 
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        super.onCreate(savedInstanceState)
 
-		setContentView(R.layout.activity_feed_list_edit)
-	}
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		when (item?.itemId) {
-			android.R.id.home -> onBackPressed()
-		}
+        setContentView(R.layout.activity_feed_list_edit)
+    }
 
-		return false
-	}
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+
+        return false
+    }
 }
